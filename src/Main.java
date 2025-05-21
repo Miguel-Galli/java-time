@@ -1,42 +1,49 @@
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 
 public class Main {
     public static void main(String[] args) {
-        LocalDate dataCompra = LocalDate.now();
-        LocalDate dataPrimeiraParcela = LocalDate.of(2025,5,25);
-        LocalDate dataSegundaParcela = dataPrimeiraParcela.plusDays(30);
+        Scanner scanner = new Scanner(System.in);
 
-        if (dataPrimeiraParcela.isEqual(LocalDate.now())) {
-            System.out.println("Hoje é o dia do vencimento");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        System.out.println("Digite o horario de entrada (HH:mm): ");
+        LocalTime entrada = LocalTime.parse(scanner.nextLine(), formatter);
+
+        System.out.println("Digite a carga horaria diária em horas: ");
+        int cargaHoraria = Integer.parseInt(scanner.nextLine());
+
+        System.out.println("Digite o horario de sua saída (HH:mm): ");
+        LocalTime saida = LocalTime.parse(scanner.nextLine(), formatter);
+
+        scanner.close();
+
+        LocalTime saidaPrevista = entrada.plusHours(cargaHoraria);
+
+        Duration duration = Duration.between(saida, saidaPrevista);
+        long horasExtras = duration.toHours();
+        long minutosExtras = duration.toMinutesPart();
+
+
+        System.out.println("Horario de entrada: " + entrada);
+        System.out.println("Horario de saída prevista: " + saidaPrevista.format(formatter));
+        System.out.println("Horario de saída real: " + saida.format(formatter));
+
+
+
+        if (horasExtras == 0 && minutosExtras == 0) {
+            System.out.println("Saldo de horas: 0h 0min");
         } else {
-            System.out.println("Ainda não está no dia do vencimento");
+            String sinal;
+            if (horasExtras > 0 || minutosExtras > 0) {
+                sinal = "+";
+            } else {
+                sinal = "-";
+            }
+            System.out.println("Saldo de horas: " + sinal + Math.abs(horasExtras));
         }
 
-        System.out.println("Data da compra: " + dataCompra);
-        System.out.println("Data da primeira parcela: " + dataPrimeiraParcela);
-        System.out.println("Data da segunda parcela: " + dataSegundaParcela);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        System.out.println("\nData da compra formatada: " + dataCompra.format(formatter));
-
-        ZonedDateTime dataConclusaoCompra = ZonedDateTime.now();
-        System.out.println("\nData conclusão da compra: " + dataConclusaoCompra);
-
-        ZonedDateTime dataCompraNY = dataConclusaoCompra.withZoneSameInstant(ZoneId.of("America/New_York"));
-        System.out.println("Data conclusão da compra NY: " + dataCompraNY);
-
-        LocalTime inicio = LocalTime.of(9,0);
-        LocalTime fim = LocalTime.of(17,30);
-
-        Duration duration = Duration.between(inicio, fim);
-        System.out.println("\nA duração do expediente: " + duration.toHours() + " horas e " + duration.toMinutesPart() + " minutos" );
-
-        LocalDate dataPagamento = LocalDate.parse("2025-10-30");
-        Period periodo = Period.between(dataCompra, dataPagamento);
-        System.out.println("\nDiferença em dias é: " + periodo.getDays());
 
     }
 }

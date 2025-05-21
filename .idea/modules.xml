@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/javaTime.iml" filepath="$PROJECT_DIR$/javaTime.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JavaTime.iml" filepath="$PROJECT_DIR$/JavaTime.iml" />
     </modules>
   </component>
 </project>
